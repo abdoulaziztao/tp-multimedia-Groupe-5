@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Veillée sous le baobab</title>
+<style>
+  html,body{margin:0;height:100%;background:#0a0e2a;overflow:hidden}
+  svg{display:block;width:100%;height:100%}
+  .tw{animation:tw 3.5s ease-in-out infinite alternate}
+  @keyframes tw{from{opacity:.25}to{opacity:1}}
+  .sway{animation:sway 6s ease-in-out infinite alternate}
+  .sway.b{animation-duration:7.5s;animation-delay:-2s}
+  .sway.c{animation-duration:5.2s;animation-delay:-4s}
+  @keyframes sway{from{transform:rotate(-1.6deg)}to{transform:rotate(1.6deg)}}
+  .fl{transform-box:fill-box;transform-origin:50% 100%;animation:fl .9s ease-in-out infinite alternate}
+  .fl.b{animation-duration:.7s;animation-delay:-.3s}
+  .fl.c{animation-duration:.55s;animation-delay:-.5s}
+  @keyframes fl{0%{transform:scale(1,1) skewX(-3deg)}100%{transform:scale(.92,1.15) skewX(4deg)}}
+  .glow{transform-box:fill-box;transform-origin:center;animation:glow 2.2s ease-in-out infinite alternate}
+  @keyframes glow{from{opacity:.65;transform:scale(.96)}to{opacity:1;transform:scale(1.04)}}
+  .smoke,.ember{transform-box:fill-box;transform-origin:center;opacity:0;animation-iteration-count:infinite;animation-timing-function:linear}
+  .smoke{animation-name:smoke;animation-duration:11s}
+  .ember{animation-name:ember;animation-duration:4.5s}
+  @keyframes smoke{0%{opacity:0;transform:translate(0,0) scale(.5)}15%{opacity:.32}100%{opacity:0;transform:translate(var(--dx),-400px) scale(3.2)}}
+  @keyframes ember{0%{opacity:0;transform:translate(0,0)}15%{opacity:1}100%{opacity:0;transform:translate(var(--dx),-230px)}}
+  @media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</head>
+<body>
+<svg viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Veillée sous un baobab, autour d'un feu de camp">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#070a24"/><stop offset=".6" stop-color="#1b1745"/><stop offset="1" stop-color="#5a2a50"/>
+    </linearGradient>
+    <linearGradient id="trunk" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#2a1810"/><stop offset=".6" stop-color="#4a2c1b"/><stop offset="1" stop-color="#8a4a26"/>
+    </linearGradient>
+    <radialGradient id="fireGlow" cx=".5" cy=".5" r=".5">
+      <stop offset="0" stop-color="#ffb347" stop-opacity=".75"/><stop offset=".5" stop-color="#e8641e" stop-opacity=".25"/><stop offset="1" stop-color="#e8641e" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="kente" width="60" height="40" patternUnits="userSpaceOnUse">
+      <rect width="60" height="40" fill="#2b1218"/>
+      <path d="M0 40 30 8 60 40Z" fill="#c8561f"/><path d="M12 40 30 20 48 40Z" fill="#f2b134"/><path d="M24 40 30 33 36 40Z" fill="#2b1218"/>
+    </pattern>
+    <g id="crown">
+      <circle cx="0" cy="0" r="52"/><circle cx="-48" cy="14" r="38"/><circle cx="46" cy="10" r="40"/><circle cx="-14" cy="-34" r="34"/><circle cx="24" cy="-30" r="30"/>
+    </g>
+  </defs>
+
+  <rect width="1600" height="900" fill="url(#sky)"/>
+  <g id="stars" fill="#fff6d8"></g>
+  <circle cx="1330" cy="150" r="46" fill="#f6e6b4"/><circle cx="1352" cy="136" r="42" fill="#1a1745"/>
+
+  <!-- collines -->
+  <path d="M0 700 Q300 620 620 680 T1240 660 T1600 690 V900H0Z" fill="#2a1a3d"/>
+  <path d="M0 760 Q400 700 800 750 T1600 740 V900H0Z" fill="#1d1228"/>
+
+  <!-- baobab -->
+  <g>
+    <path d="M455 800 C495 700 515 570 522 450 L600 450 C606 570 628 700 668 800Z" fill="url(#trunk)"/>
+    <g fill="none" stroke="#3b2418" stroke-linecap="round">
+      <path d="M545 455 C520 400 470 370 430 330" stroke-width="22"/>
+      <path d="M555 455 C540 390 520 340 505 300" stroke-width="18"/>
+      <path d="M570 455 C570 390 565 330 560 275" stroke-width="20"/>
+      <path d="M585 455 C610 390 650 350 700 310" stroke-width="18"/>
+      <path d="M596 458 C640 420 700 400 760 380" stroke-width="16"/>
+    </g>
+    <g style="transform-origin:545px 455px" class="sway"><g fill="#1c4a3a"><use href="#crown" x="430" y="318"/><use href="#crown" x="505" y="285"/></g></g>
+    <g style="transform-origin:570px 455px" class="sway b"><g fill="#256049"><use href="#crown" x="560" y="262"/></g></g>
+    <g style="transform-origin:590px 455px" class="sway c"><g fill="#1f5642"><use href="#crown" x="700" y="298"/><use href="#crown" x="768" y="372"/></g></g>
+  </g>
+
+  <!-- sol et motif -->
+  <path d="M0 800 Q500 770 1000 790 T1600 780 V900H0Z" fill="#150c1a"/>
+  <rect y="860" width="1600" height="40" fill="url(#kente)"/>
+
+  <!-- lueur du feu -->
+  <ellipse class="glow" cx="1000" cy="770" rx="420" ry="190" fill="url(#fireGlow)"/>
+
+  <!-- personnages (silhouettes) -->
+  <g fill="#120a14">
+    <g transform="translate(860 800)"><path d="M-24 0Q-24-42 0-46Q24-42 24 0Z"/><circle cx="0" cy="-60" r="14"/></g>
+    <g transform="translate(790 812) scale(.9)"><path d="M-24 0Q-24-42 0-46Q24-42 24 0Z"/><circle cx="0" cy="-60" r="14"/></g>
+    <g transform="translate(1150 802)"><path d="M-24 0Q-24-42 0-46Q24-42 24 0Z"/><circle cx="0" cy="-60" r="14"/><path d="M-14-66Q0-90 14-66Z"/></g>
+  </g>
+
+  <!-- feu -->
+  <g>
+    <path d="M950 800 L1052 770" stroke="#3b2418" stroke-width="16" stroke-linecap="round"/>
+    <path d="M950 770 L1052 800" stroke="#4a2c1b" stroke-width="16" stroke-linecap="round"/>
+    <path class="fl" d="M1000 780 C960 760 960 720 985 690 C985 710 995 715 1000 700 C1010 680 1000 660 1005 640 C1040 670 1050 740 1000 780Z" fill="#e8501a"/>
+    <path class="fl b" d="M1000 780 C975 765 978 735 995 715 C998 730 1006 730 1008 715 C1030 740 1030 765 1000 780Z" fill="#ffa21f"/>
+    <path class="fl c" d="M1000 780 C988 770 990 752 1000 742 C1010 752 1012 770 1000 780Z" fill="#ffe27a"/>
+  </g>
+
+  <g id="fx"></g>
+</svg>
+
+<script>
+  const NS = 'http://www.w3.org/2000/svg';
+  const r = (a, b) => a + Math.random() * (b - a);
+  const add = (parent, tag, attrs) => {
+    const el = document.createElementNS(NS, tag);
+    for (const k in attrs) el.setAttribute(k, attrs[k]);
+    parent.appendChild(el);
+    return el;
+  };
+  // Étoiles
+  const stars = document.getElementById('stars');
+  for (let i = 0; i < 90; i++) {
+    add(stars, 'circle', {
+      cx: r(0, 1600), cy: r(0, 520), r: r(.8, 2.2), class: 'tw',
+      style: `animation-delay:${-r(0, 4)}s;animation-duration:${r(2.5, 5)}s`
+    });
+  }
+  // Fumée et braises (délais négatifs = boucle sans couture)
+  const fx = document.getElementById('fx');
+  for (let i = 0; i < 10; i++) {
+    add(fx, 'circle', {
+      cx: r(995, 1010), cy: 690, r: r(9, 15), fill: '#8b7a8f', class: 'smoke',
+      style: `--dx:${r(-30, 90)}px;animation-delay:${-i * 1.1}s`
+    });
+  }
+  for (let i = 0; i < 14; i++) {
+    add(fx, 'circle', {
+      cx: r(985, 1015), cy: 700, r: r(1.5, 3), fill: '#ffb347', class: 'ember',
+      style: `--dx:${r(-50, 60)}px;animation-delay:${-r(0, 4.5)}s;animation-duration:${r(3.5, 5.5)}s`
+    });
+  }
+</script>
+</body>
+</html>
