@@ -16,3 +16,6 @@ node_modules
 .DS_Store
 # TypeScript cache
 *.tsbuildinfo
+
+# Enregistrements en attente (développement local)
+.recordings/

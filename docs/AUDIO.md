@@ -51,3 +51,29 @@ En lecture de repli, le lecteur propose le choix de la **voix** (celles install�
 3. Dès que « Mooré » est choisi dans le lecteur, la page affiche ce texte avec la mention « à relire par un locuteur natif ». Si le nombre de chapitres ne correspond pas, le français reste affiché.
 
 Le texte doit être écrit ou relu par un locuteur natif. Il s'affiche, mais **l'audio reste à enregistrer** (voir plus haut) : aucune voix de synthèse ne lit le mooré.
+
+
+## Envoi direct depuis le site (sans passer par GitHub)
+
+La page **Contribuer** peut publier l'enregistrement directement : le conteur clique sur « Publier sur le site », l'équipe valide sur `/moderation`, et la voix apparaît dans le lecteur du conte, sans commit ni redéploiement.
+
+### Activer (une seule fois, ~5 minutes)
+
+1. Sur vercel.com, ouvre ton projet → onglet **Storage** → **Create** → **Blob**. Choisis un store **Public** et connecte-le au projet : Vercel ajoute seul la variable `BLOB_READ_WRITE_TOKEN`.
+2. Projet → **Settings → Environment Variables** : ajoute `ADMIN_TOKEN` avec un mot de passe long et unique (c'est celui de la page `/moderation`).
+3. *(Facultatif)* Ajoute `RECORDINGS_MODE` = `open` pour publier tout de suite, sans validation. Par défaut (`moderated`), chaque envoi attend ton accord.
+4. **Redéploie** le projet (Deployments → Redeploy).
+
+Sans ces réglages, le bouton « Publier » n'apparaît pas et l'atelier propose seulement le téléchargement (procédure ci-dessus).
+
+### Valider les envois
+
+Ouvre `/moderation`, saisis le mot de passe, écoute chaque enregistrement, vérifie que l'accord est déclaré, puis **Publier** ou **Refuser**. Un nouvel enregistrement pour le même conte et la même langue remplace le précédent.
+
+### Garde-fous
+
+- Accord obligatoire côté serveur ; le fichier doit être un vrai audio (webm, ogg, m4a, mp3, contrôlé sur les premiers octets) de 2 Ko à 4 Mo (≈ 4 minutes enregistrées).
+- Champ piège contre les robots ; `/api` et `/moderation` exclus des moteurs de recherche.
+- Pas de limitation de débit : en mode `open`, n'importe qui peut remplacer une voix. Garde `moderated` pour une diffusion publique.
+- Les fiches (nom du conteur, village, date, accord) sont conservées avec le fichier. Le nom du conteur est facultatif ; ne publie pas sans son accord.
+- En développement (`pnpm dev`), les envois vont dans le dossier local `.recordings/` : aucun compte nécessaire pour tester (mot de passe de modération : `dev`).

@@ -6,10 +6,24 @@ import type { LangCode, Story } from './types'
 const EXTENSIONS = ['mp3', 'm4a', 'ogg', 'webm'] as const
 const recordingCache = new Map<string, string | null>()
 
-/** Cherche un enregistrement `/audio/<slug>.<langue>.<ext>` déposé dans `public/audio`. */
+/** Cherche un enregistrement publié (API) ou un fichier `/audio/<slug>.<langue>.<ext>` déposé dans `public/audio`. */
 export async function findRecording(slug: string, lang: LangCode): Promise<string | null> {
   const key = `${slug}.${lang}`
   if (recordingCache.has(key)) return recordingCache.get(key) ?? null
+  // 1) Enregistrements envoyés depuis le site et validés (stockage Blob).
+  try {
+    const res = await fetch(`/api/recordings?slug=${encodeURIComponent(slug)}&lang=${encodeURIComponent(lang)}`)
+    if (res.ok) {
+      const data = (await res.json()) as { url?: string | null }
+      if (data.url) {
+        recordingCache.set(key, data.url)
+        return data.url
+      }
+    }
+  } catch {
+    /* API indisponible : on passe aux fichiers du dépôt */
+  }
+  // 2) Fichiers déposés dans public/audio.
   for (const ext of EXTENSIONS) {
     const url = `/audio/${key}.${ext}`
     try {

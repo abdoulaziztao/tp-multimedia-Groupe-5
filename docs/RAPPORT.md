@@ -28,7 +28,7 @@ Faso — Récits vivants répond à chacun de ces points et ajoute ce qui rend u
 
 ## 3. Fonctionnalités ajoutées (au-delà du sujet)
 
-- **Atelier d’enregistrement** (`/contribuer`) : enregistrement micro dans le navigateur, visualisation du signal, **consentement obligatoire** de la personne enregistrée, export de l’audio et d’une fiche de métadonnées JSON. Rien n’est envoyé à un serveur.
+- **Atelier d’enregistrement** (`/contribuer`) : enregistrement micro dans le navigateur, visualisation du signal, **consentement obligatoire** de la personne enregistrée, puis **publication directe sur le site** (stockage Vercel Blob) avec **validation préalable** par l’équipe sur une page protégée (`/moderation`). Le serveur contrôle le consentement, le type réel du fichier et sa taille. Le téléchargement de l’audio et d’une fiche JSON reste possible. Rien n’est envoyé avant le clic sur « Publier ».
 - **Lexique des langues** (`/langues`) : présentation du mooré, du dioula et du fulfulde avec mini-lexique, signalé comme « à valider avec des locuteurs ».
 - **Catalogue** (`/contes`) avec recherche insensible aux accents et filtre par langue de tradition.
 - **Animations d'interface** : apparition progressive des sections au défilement, titres animés, cartes interactives ; désactivées si l'appareil demande de réduire les animations.
@@ -57,7 +57,7 @@ Ajouter un conte = ajouter **un objet** dans `lib/stories.ts` : la carte, le cat
 - **MapLibre GL** plutôt que Leaflet : seule une carte WebGL permet un **vrai relief 3D**. Fonds OpenStreetMap/CARTO, satellite Esri, relief AWS Terrain Tiles, limites geoBoundaries.
 - **SVG + CSS animés** plutôt que des images ou vidéos : quelques Ko, nets à toute taille, aucun média à héberger.
 - **Web Audio API** : ambiances générées en direct, donc aucun fichier sonore à diffuser ni à licencier.
-- **MediaRecorder** : collecte de voix sans serveur ni compte.
+- **MediaRecorder + Vercel Blob** : collecte de voix depuis le navigateur, stockage hébergé, sans compte pour les contributeurs.
 - **Polices auto-hébergées** (Manrope, DM Mono, Cormorant Garamond) : aucun appel à un service tiers, build reproductible.
 - **Base UI** pour les onglets accessibles ; **lucide-react** pour les icônes.
 
@@ -87,7 +87,7 @@ Le lexique des langues est pédagogique et doit être relu par des locuteurs nat
 - Collecte de voix auprès de conteurs, avec fiches de provenance (conteur, lieu, date, consentement).
 - Couverture des 5 régions restantes.
 - Mode hors-ligne (PWA avec tuiles en cache) pour les zones à faible connectivité.
-- Back-office de modération pour recevoir des contributions sans passer par GitHub.
+- Limitation de débit et authentification des contributeurs pour ouvrir l’envoi au grand public.
 - Relecture du lexique par des linguistes et locuteurs.
 
 ## 10. Prise en main

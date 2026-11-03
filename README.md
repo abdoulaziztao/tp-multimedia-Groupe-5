@@ -7,7 +7,7 @@ Projet universitaire — Groupe 5.
 - **8 contes** illustrés par des scènes SVG animées
 - Narration audio **mooré / dioula / fulfulde** (enregistrements réels ou voix de repli) avec texte synchronisé
 - **Histoires à embranchements**, quiz, carnet du griot (badges)
-- **Atelier d'enregistrement** dans le navigateur, avec consentement
+- **Atelier d'enregistrement** dans le navigateur, avec consentement ; publication directe sur le site après validation (`/moderation`)
 - Accessible (clavier, `prefers-reduced-motion`, texte intégral), responsive, SEO
 
 ## Démarrer
