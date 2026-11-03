@@ -171,8 +171,13 @@ async function removePublishedBlobs(slug: string, lang: string) {
 /** URL de l'enregistrement publié pour un conte et une langue (stockage Blob uniquement). */
 export async function getPublishedUrl(slug: string, lang: string): Promise<string | null> {
   if (storageKind() !== 'blob') return null
-  const { blobs } = await list({ prefix: `published/${slug}.${lang}.` })
-  return blobs.find((b) => !b.pathname.endsWith('.json'))?.url ?? null
+  // Dossier normal (published/), puis la racine du store si un fichier y a été déposé à la main.
+  for (const prefix of [`published/${slug}.${lang}.`, `${slug}.${lang}.`]) {
+    const { blobs } = await list({ prefix })
+    const hit = blobs.find((b) => /\.(webm|ogg|m4a|mp3)$/.test(b.pathname))
+    if (hit) return hit.url
+  }
+  return null
 }
 
 /* ------------------------------------------------------------------ */
