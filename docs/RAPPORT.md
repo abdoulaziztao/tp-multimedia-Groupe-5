@@ -76,7 +76,7 @@ Le lexique des langues est pédagogique et doit être relu par des locuteurs nat
 
 ## 8. Limites connues
 
-1. **Voix en langues nationales** : tant qu’aucun enregistrement n’est déposé, le mooré, le dioula et le fulfulde retombent sur la voix de synthèse en français (le site l’indique à l’écran). Les synthèses vocales courantes ne savent pas lire ces langues, d’où l’atelier d’enregistrement.
+1. **Textes et voix en langues nationales** : le conte « Le génie de la mare sacrée » est disponible **en texte mooré** (fourni par l'équipe, à faire relire par un locuteur natif). Les autres contes restent en français pour l'instant. Côté audio, tant qu’aucun enregistrement n’est déposé, le mooré, le dioula et le fulfulde retombent sur la voix de synthèse en français (le site l’indique à l’écran). Les synthèses vocales courantes ne savent pas lire ces langues, d’où l’atelier d’enregistrement.
 2. **Fonds de carte en ligne** : la carte nécessite une connexion pour charger les tuiles.
 3. **5 régions sur 13** n’ont pas encore de conte ; elles sont signalées « à collecter » et renvoient vers l’atelier.
 4. Le corpus compte 8 textes courts ; il n’a pas été validé par des conteurs ou des ethnologues.
