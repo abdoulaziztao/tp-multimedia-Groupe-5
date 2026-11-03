@@ -58,6 +58,12 @@ export function StoryExperience({ story }: { story: Story }) {
                 Texte en {LANG_BY_CODE[lang].name} · à relire par un locuteur natif
               </p>
             )}
+            {lang !== 'fr' && !shownTranslation && (
+              <p className="reader__lang reader__lang--todo" role="note">
+                Le texte de ce conte n’est pas encore disponible en {LANG_BY_CODE[lang].name} : la version française est affichée.
+                {narration.mode === 'recording' ? ' L’audio, lui, est bien en ' + LANG_BY_CODE[lang].name + '.' : ''}
+              </p>
+            )}
             {chapters.map((text, i) => {
               const active = narration.status !== 'idle' && narration.chapter === i
               return (
