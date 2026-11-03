@@ -19,7 +19,7 @@ interface Props {
 }
 
 export function AudioPlayer({ narration, lang, onLangChange, compact = false }: Props) {
-  const { status, mode, progress, duration, elapsed, fallback, checking } = narration
+  const { status, mode, progress, duration, elapsed, fallback, checking, voices, voiceId, setVoiceId, rate, setRate } = narration
   const playing = status === 'playing'
   const unavailable = mode === 'none' && !checking
 
@@ -80,6 +80,29 @@ export function AudioPlayer({ narration, lang, onLangChange, compact = false }: 
           <span>{mode === 'speech' ? '≈ ' : ''}{fmt(duration)}</span>
         </div>
       </div>
+
+      {mode === 'speech' && !compact && (
+        <div className="audio__voice">
+          {voices.length > 1 && (
+            <label>
+              Voix
+              <select value={voiceId} onChange={(e) => setVoiceId(e.target.value)}>
+                {voices.map((v) => (
+                  <option key={v.id} value={v.id}>{v.label}</option>
+                ))}
+              </select>
+            </label>
+          )}
+          <label>
+            Vitesse
+            <select value={rate} onChange={(e) => setRate(Number(e.target.value))}>
+              <option value={0.75}>Lente</option>
+              <option value={0.92}>Normale</option>
+              <option value={1.1}>Rapide</option>
+            </select>
+          </label>
+        </div>
+      )}
 
       {fallback && (
         <p className="audio__notice" role="status">

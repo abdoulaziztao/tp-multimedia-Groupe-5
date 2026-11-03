@@ -285,6 +285,9 @@ code { font-family: var(--mono); font-size: 0.88em; background: #ece3d3; padding
 .audio__times { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 10px; color: #a79e91; }
 .audio__notice { font-size: 12px; line-height: 1.6; color: #e9c981; background: rgba(217, 161, 59, 0.1); padding: 10px 12px; border-left: 3px solid var(--gold); }
 .audio__notice a { text-decoration: underline; text-underline-offset: 3px; }
+.audio__voice { display: grid; gap: 10px; }
+.audio__voice label { display: flex; flex-direction: column; gap: 4px; font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: #a79e91; }
+.audio__voice select { padding: 8px 10px; background: var(--night); color: var(--cream); border: 1px solid #5a5148; border-radius: 2px; font-family: var(--ui); font-size: 12px; letter-spacing: 0; text-transform: none; }
 .audio--compact { padding: 14px; gap: 12px; }
 .audio--compact .audio__play { width: 40px; height: 40px; }
 

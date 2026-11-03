@@ -42,6 +42,12 @@ export interface Narration {
   /** La langue demandée n'a pas d'enregistrement : lecture de repli en français. */
   fallback: boolean
   checking: boolean
+  /** Voix françaises disponibles sur l'appareil (voix de synthèse). */
+  voices: { id: string; label: string }[]
+  voiceId: string
+  setVoiceId: (id: string) => void
+  rate: number
+  setRate: (rate: number) => void
   toggle: () => void
   stop: () => void
   seek: (fraction: number) => void
@@ -87,6 +93,12 @@ export function useNarration(story: Story, lang: LangCode, onEnded?: () => void)
   const [recordingUrl, setRecordingUrl] = useState<string | null>(null)
   const [checking, setChecking] = useState(true)
 
+  const [voiceList, setVoiceList] = useState<SpeechSynthesisVoice[]>([])
+  const [voiceId, setVoiceIdState] = useState('')
+  const [rate, setRateState] = useState(0.92)
+  const voiceRef = useRef('')
+  const rateRef = useRef(0.92)
+
   const audioRef = useRef<HTMLAudioElement | null>(null)
   const segmentRef = useRef(0)
   const generationRef = useRef(0)
@@ -95,6 +107,26 @@ export function useNarration(story: Story, lang: LangCode, onEnded?: () => void)
   endedRef.current = onEnded
 
   const hasSpeech = typeof window !== 'undefined' && 'speechSynthesis' in window
+
+  // Voix françaises (la liste se remplit de façon asynchrone selon le navigateur).
+  useEffect(() => {
+    if (!hasSpeech) return
+    const synth = window.speechSynthesis
+    const load = () => {
+      const fr = synth.getVoices().filter((v) => v.lang.toLowerCase().startsWith('fr'))
+      setVoiceList(fr)
+    }
+    load()
+    synth.addEventListener('voiceschanged', load)
+    try {
+      const saved = JSON.parse(window.localStorage.getItem('faso.voice') ?? '{}') as { id?: string; rate?: number }
+      if (saved.id) { voiceRef.current = saved.id; setVoiceIdState(saved.id) }
+      if (saved.rate) { rateRef.current = saved.rate; setRateState(saved.rate) }
+    } catch {
+      /* stockage indisponible : réglages par défaut */
+    }
+    return () => synth.removeEventListener('voiceschanged', load)
+  }, [hasSpeech])
 
   const teardown = useCallback(() => {
     generationRef.current += 1
@@ -145,7 +177,8 @@ export function useNarration(story: Story, lang: LangCode, onEnded?: () => void)
       const synth = window.speechSynthesis
       synth.cancel()
       const generation = ++generationRef.current
-      const voice = synth.getVoices().find((v) => v.lang.toLowerCase().startsWith('fr'))
+      const frVoices = synth.getVoices().filter((v) => v.lang.toLowerCase().startsWith('fr'))
+      const voice = frVoices.find((v) => v.voiceURI === voiceRef.current) ?? frVoices[0]
       const speak = (i: number) => {
         if (generation !== generationRef.current) return
         if (i >= segments.length) return finish()
@@ -154,7 +187,7 @@ export function useNarration(story: Story, lang: LangCode, onEnded?: () => void)
         const u = new SpeechSynthesisUtterance(seg.text)
         u.lang = 'fr-FR'
         if (voice) u.voice = voice
-        u.rate = 0.92
+        u.rate = rateRef.current
         u.onboundary = (e) => {
           if (generation !== generationRef.current) return
           updateProgress(Math.min(0.999, (seg.start + e.charIndex) / total))
@@ -227,6 +260,34 @@ export function useNarration(story: Story, lang: LangCode, onEnded?: () => void)
     }
   }, [checking, mode, playRecording, recordingUrl, speakFrom, status])
 
+  const persistVoice = () => {
+    try {
+      window.localStorage.setItem('faso.voice', JSON.stringify({ id: voiceRef.current, rate: rateRef.current }))
+    } catch {
+      /* ignoré */
+    }
+  }
+
+  const setVoiceId = useCallback(
+    (id: string) => {
+      voiceRef.current = id
+      setVoiceIdState(id)
+      persistVoice()
+      if (status === 'playing' && mode === 'speech') speakFrom(segmentRef.current)
+    },
+    [mode, speakFrom, status],
+  )
+
+  const setRate = useCallback(
+    (value: number) => {
+      rateRef.current = value
+      setRateState(value)
+      persistVoice()
+      if (status === 'playing' && mode === 'speech') speakFrom(segmentRef.current)
+    },
+    [mode, speakFrom, status],
+  )
+
   const stop = useCallback(() => {
     teardown()
     segmentRef.current = 0
@@ -265,6 +326,11 @@ export function useNarration(story: Story, lang: LangCode, onEnded?: () => void)
     elapsed: progress * duration,
     fallback: lang !== 'fr' && !recordingUrl && !checking,
     checking,
+    voices: voiceList.map((v) => ({ id: v.voiceURI, label: `${v.name} (${v.lang})` })),
+    voiceId: voiceId || voiceList[0]?.voiceURI || '',
+    setVoiceId,
+    rate,
+    setRate,
     toggle,
     stop,
     seek,

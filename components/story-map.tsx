@@ -69,6 +69,14 @@ function buildStyle(): StyleSpec {
         maxzoom: 14,
         attribution: 'Relief : Mapzen / AWS Terrain Tiles',
       },
+      // Source distincte pour l'ombrage : MapLibre recommande de ne pas partager celle du terrain 3D.
+      'dem-shade': {
+        type: 'raster-dem',
+        tiles: ['https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png'],
+        encoding: 'terrarium',
+        tileSize: 256,
+        maxzoom: 14,
+      },
     },
     layers: [
       { id: 'bg', type: 'background', paint: { 'background-color': '#e9e2d3' } },
@@ -77,7 +85,7 @@ function buildStyle(): StyleSpec {
       {
         id: 'hillshade',
         type: 'hillshade',
-        source: 'dem',
+        source: 'dem-shade',
         paint: {
           'hillshade-exaggeration': 0.55,
           'hillshade-shadow-color': '#5a4636',
@@ -128,6 +136,8 @@ export default function StoryMap({
     ;(async () => {
       const maplibre = await import('maplibre-gl')
       if (cancelled) return
+      // Le worker est servi depuis /public (voir scripts/copy-maplibre-worker.mjs).
+      maplibre.setWorkerUrl('/vendor/maplibre-gl-worker.mjs')
 
       let map: MapLibreMap
       try {

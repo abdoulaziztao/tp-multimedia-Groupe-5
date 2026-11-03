@@ -28,3 +28,11 @@ Sans fichier, le site lit le texte avec la voix de synthèse du navigateur (en f
 - Ne jamais publier une voix sans consentement écrit ou enregistré.
 - Conserver la fiche de provenance à côté de chaque fichier audio.
 - Si le conteur raconte sa propre version, adapter aussi le texte dans `lib/stories.ts` et le signaler dans le champ `context`.
+
+## Pourquoi le mooré, le dioula et le fulfulde ne sont pas « générés »
+
+Les voix de synthèse des navigateurs ne savent pas lire ces langues. La seule façon d'avoir une narration fidèle est l'**enregistrement par un locuteur natif**, qui raconte le conte dans sa langue (il peut le traduire à l'oral, il n'a pas besoin de lire mot à mot le texte français).
+
+## Voix française
+
+En lecture de repli, le lecteur propose le choix de la **voix** (celles installées sur l'appareil) et de la **vitesse**. Les meilleures voix françaises sont souvent « Google français » (Chrome) ou les voix Siri / Amélie (Safari, Apple).
