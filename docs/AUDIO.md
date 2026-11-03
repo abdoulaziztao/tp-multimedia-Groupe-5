@@ -36,3 +36,18 @@ Les voix de synthèse des navigateurs ne savent pas lire ces langues. La seule f
 ## Voix française
 
 En lecture de repli, le lecteur propose le choix de la **voix** (celles installées sur l'appareil) et de la **vitesse**. Les meilleures voix françaises sont souvent « Google français » (Chrome) ou les voix Siri / Amélie (Safari, Apple).
+
+## Ajouter le texte d'un conte en mooré (ou dioula, fulfulde)
+
+1. Ouvrir `lib/translations.ts`.
+2. Ajouter une entrée avec le slug du conte, le code de langue et **un texte par chapitre** (même nombre de chapitres que le texte français) :
+
+```ts
+'la-hyene-et-le-lievre': {
+  mos: { chapters: ['…', '…', '…', '…'], moral: '…' },
+},
+```
+
+3. Dès que « Mooré » est choisi dans le lecteur, la page affiche ce texte avec la mention « à relire par un locuteur natif ». Si le nombre de chapitres ne correspond pas, le français reste affiché.
+
+Le texte doit être écrit ou relu par un locuteur natif. Il s'affiche, mais **l'audio reste à enregistrer** (voir plus haut) : aucune voix de synthèse ne lit le mooré.

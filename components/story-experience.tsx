@@ -9,12 +9,17 @@ import { BranchingStory } from '@/components/branching-story'
 import { Quiz } from '@/components/quiz'
 import { markHeard, useProgress } from '@/lib/progress'
 import { useNarration } from '@/lib/use-narration'
+import { getTranslation } from '@/lib/translations'
+import { LANG_BY_CODE } from '@/lib/languages'
 import type { LangCode, Story } from '@/lib/types'
 
 export function StoryExperience({ story }: { story: Story }) {
   const [lang, setLang] = useState<LangCode>(story.preferredLang)
   const narration = useNarration(story, lang, () => markHeard(story.slug))
   const heard = useProgress().heard.includes(story.slug)
+  const translation = getTranslation(story.slug, lang)
+  const chapters = translation?.chapters.length === story.chapters.length ? translation.chapters : story.chapters
+  const shownTranslation = translation && chapters === translation.chapters ? translation : undefined
 
   const lengths = story.chapters.map((c) => c.length)
   const total = lengths.reduce((a, b) => a + b, 0)
@@ -48,7 +53,12 @@ export function StoryExperience({ story }: { story: Story }) {
           </div>
 
           <article className="reader" aria-label={`Texte du conte ${story.title}`}>
-            {story.chapters.map((text, i) => {
+            {shownTranslation && (
+              <p className="reader__lang" lang={lang === 'mos' ? 'mos' : lang === 'dyu' ? 'dyu' : 'ff'}>
+                Texte en {LANG_BY_CODE[lang].name} · à relire par un locuteur natif
+              </p>
+            )}
+            {chapters.map((text, i) => {
               const active = narration.status !== 'idle' && narration.chapter === i
               return (
                 <p
@@ -61,7 +71,7 @@ export function StoryExperience({ story }: { story: Story }) {
                 </p>
               )
             })}
-            <p className="reader__moral"><strong>Morale.</strong> {story.moral}</p>
+            <p className="reader__moral"><strong>Morale.</strong> {shownTranslation?.moral ?? story.moral}</p>
           </article>
         </div>
       </Tabs.Panel>
