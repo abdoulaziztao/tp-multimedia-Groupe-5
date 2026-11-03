@@ -21,11 +21,12 @@ export function SiteHeader() {
 
   return (
     <header className="site-header">
-      <Link className="brand" href="/" aria-label="Faso, récits vivants — accueil">
+      <Link className="brand" href="/">
         <span className="brand__mark" aria-hidden="true">✦</span>
         <span>
           <strong>FASO</strong>
           <small>RÉCITS VIVANTS</small>
+          <span className="sr-only"> — retour à l’accueil</span>
         </span>
       </Link>
       <nav id="nav-principale" className={`main-nav ${open ? 'is-open' : ''}`} aria-label="Navigation principale">

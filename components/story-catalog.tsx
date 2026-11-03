@@ -39,6 +39,7 @@ export function StoryCatalog({ stories }: { stories: Story[] }) {
         </div>
       </div>
 
+      <h2 className="sr-only">Liste des contes</h2>
       <p className="results" role="status">{results.length} conte{results.length > 1 ? 's' : ''}</p>
       {results.length ? (
         <div className="grid">
