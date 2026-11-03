@@ -672,3 +672,6 @@ export function readingMinutes(story: Story): number {
   const words = storyText(story).split(/\s+/).length
   return Math.max(1, Math.round(words / 150))
 }
+
+/** Image facultative d'un conte : déposer `public/images/<slug>.jpg` suffit (voir docs/IMAGES.md). */
+export const storyImage = (slug: string) => `/images/${slug}.jpg`

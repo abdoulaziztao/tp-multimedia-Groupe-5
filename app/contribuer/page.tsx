@@ -15,14 +15,14 @@ export default function ContributePage() {
           Donne une voix <em>au conte</em>
         </h1>
         <p>
-          Enregistre un conteur dans sa langue, télécharge le fichier et ajoute-le au dépôt : le site remplace alors la voix
-          de synthèse par cet enregistrement. Rien n’est envoyé sur un serveur : tout reste sur ton appareil.
+          Enregistre un conteur dans sa langue et publie-le : le site remplace alors la voix de synthèse par cet
+          enregistrement. Rien n’est envoyé avant que tu cliques sur « Publier », et l’accord de la personne est obligatoire.
         </p>
       </header>
       <ol className="how">
         <li>Choisis le conte et la langue, puis demande l’accord de la personne enregistrée.</li>
         <li>Enregistre dans un endroit calme, micro à 20 cm de la bouche.</li>
-        <li>Télécharge l’audio et la fiche, puis place-les dans <code>public/audio/</code>.</li>
+        <li>Clique sur « Publier sur le site » : ta voix apparaît dans le lecteur du conte (après validation de l’équipe). Tu peux aussi télécharger le fichier.</li>
       </ol>
       <Recorder />
     </section>

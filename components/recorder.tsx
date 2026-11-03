@@ -1,13 +1,16 @@
 'use client'
 
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { Download, Mic, RotateCcw, Square } from 'lucide-react'
+import { Download, Mic, RotateCcw, Send, Square } from 'lucide-react'
 import { LANGUAGES } from '@/lib/languages'
 import { STORIES } from '@/lib/stories'
 import type { LangCode } from '@/lib/types'
 
 type Phase = 'idle' | 'recording' | 'recorded'
-const MAX_SECONDS = 600
+/** 4 min à 48 kbit/s ≈ 1,5 Mo : sous la limite d'envoi de 4 Mo. */
+const MAX_SECONDS = 240
+
+type Upload = { state: 'idle' | 'sending' | 'published' | 'pending' | 'error'; message?: string }
 
 function pickMime(): { mime: string | undefined; ext: string } {
   if (typeof MediaRecorder === 'undefined') return { mime: undefined, ext: 'webm' }
@@ -33,6 +36,8 @@ export function Recorder() {
   const [blob, setBlob] = useState<Blob | null>(null)
   const [url, setUrl] = useState<string | null>(null)
   const [ext, setExt] = useState('webm')
+  const [remote, setRemote] = useState<{ enabled: boolean; mode: 'moderated' | 'open' } | null>(null)
+  const [upload, setUpload] = useState<Upload>({ state: 'idle' })
 
   const recorder = useRef<MediaRecorder | null>(null)
   const stream = useRef<MediaStream | null>(null)
@@ -55,6 +60,12 @@ export function Recorder() {
   }, [])
 
   useEffect(() => cleanup, [cleanup])
+  useEffect(() => {
+    fetch('/api/recordings/status')
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => d && setRemote(d))
+      .catch(() => setRemote(null))
+  }, [])
   useEffect(() => () => { if (url) URL.revokeObjectURL(url) }, [url])
 
   function drawWave(analyser: AnalyserNode) {
@@ -92,7 +103,7 @@ export function Recorder() {
       const { mime, ext: e } = pickMime()
       setExt(e)
       chunks.current = []
-      const rec = new MediaRecorder(media, mime ? { mimeType: mime } : undefined)
+      const rec = new MediaRecorder(media, { ...(mime ? { mimeType: mime } : {}), audioBitsPerSecond: 48000 })
       recorder.current = rec
       rec.ondataavailable = (ev) => ev.data.size && chunks.current.push(ev.data)
       rec.onstop = () => {
@@ -135,6 +146,7 @@ export function Recorder() {
     setUrl(null)
     setSeconds(0)
     setPhase('idle')
+    setUpload({ state: 'idle' })
   }
 
   function download(content: Blob, name: string) {
@@ -143,6 +155,27 @@ export function Recorder() {
     a.download = name
     a.click()
     window.setTimeout(() => URL.revokeObjectURL(a.href), 2000)
+  }
+
+  async function publish() {
+    if (!blob) return
+    setUpload({ state: 'sending' })
+    const form = new FormData()
+    form.append('audio', new File([blob], filename, { type: blob.type }))
+    form.append('slug', slug)
+    form.append('lang', lang)
+    form.append('consent', String(consent))
+    form.append('narrator', narrator)
+    form.append('place', place)
+    form.append('website', '')
+    try {
+      const res = await fetch('/api/recordings', { method: 'POST', body: form })
+      const data = (await res.json().catch(() => ({}))) as { status?: 'published' | 'pending'; error?: string }
+      if (res.ok && data.status) setUpload({ state: data.status })
+      else setUpload({ state: 'error', message: data.error ?? "L'envoi a échoué. Télécharge le fichier à la place." })
+    } catch {
+      setUpload({ state: 'error', message: "Pas de connexion : télécharge le fichier et réessaie plus tard." })
+    }
   }
 
   function downloadMeta() {
@@ -189,6 +222,7 @@ export function Recorder() {
           Village / quartier (facultatif)
           <input value={place} onChange={(e) => setPlace(e.target.value)} placeholder="Ex. Tanghin, Ouagadougou" disabled={locked} />
         </label>
+        <input type="text" name="website" tabIndex={-1} autoComplete="off" aria-hidden="true" className="hp" />
         <label className="recorder__consent">
           <input type="checkbox" checked={consent} onChange={(e) => setConsent(e.target.checked)} />
           <span>
@@ -221,7 +255,12 @@ export function Recorder() {
               <button type="button" className="btn btn--ghost" onClick={reset}>
                 <RotateCcw aria-hidden="true" /> Recommencer
               </button>
-              <button type="button" className="btn" onClick={() => blob && download(blob, filename)}>
+              {remote?.enabled && upload.state !== 'published' && upload.state !== 'pending' && (
+                <button type="button" className="btn btn--publish" onClick={publish} disabled={upload.state === 'sending'}>
+                  <Send aria-hidden="true" /> {upload.state === 'sending' ? 'Envoi…' : 'Publier sur le site'}
+                </button>
+              )}
+              <button type="button" className="btn btn--ghost" onClick={() => blob && download(blob, filename)}>
                 <Download aria-hidden="true" /> Télécharger {filename}
               </button>
               <button type="button" className="btn btn--ghost" onClick={downloadMeta}>
@@ -233,9 +272,21 @@ export function Recorder() {
         {!consent && phase === 'idle' && <p className="hint">Coche d’abord l’accord de la personne enregistrée.</p>}
         {error && <p className="form-error" role="alert">{error}</p>}
         {url && phase === 'recorded' && <audio controls src={url} className="recorder__audio" />}
-        {phase === 'recorded' && (
+        {upload.state === 'published' && (
+          <p className="notice notice--ok" role="status">C’est en ligne. Recharge la page du conte : ta voix remplace la voix de synthèse.</p>
+        )}
+        {upload.state === 'pending' && (
+          <p className="notice notice--ok" role="status">Merci ! Ton enregistrement est envoyé. Il apparaîtra sur le site après validation.</p>
+        )}
+        {upload.state === 'error' && <p className="form-error" role="alert">{upload.message}</p>}
+        {phase === 'recorded' && !remote?.enabled && (
           <p className="hint">
-            Dépose le fichier téléchargé dans <code>public/audio/</code> du dépôt : le site le lira automatiquement.
+            L’envoi direct n’est pas activé sur ce site : télécharge le fichier et dépose-le dans <code>public/audio/</code> du dépôt.
+          </p>
+        )}
+        {phase === 'recorded' && remote?.enabled && upload.state === 'idle' && (
+          <p className="hint">
+            {remote.mode === 'moderated' ? 'L’enregistrement sera publié après relecture par l’équipe.' : 'L’enregistrement sera publié immédiatement.'}
           </p>
         )}
       </div>

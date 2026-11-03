@@ -65,8 +65,9 @@ export default function AboutPage() {
 
       <h2>Vie privée</h2>
       <p>
-        La progression (contes terminés, quiz, fins) est stockée uniquement dans ton navigateur. Les enregistrements ne
-        quittent pas ton appareil tant que tu ne les ajoutes pas toi-même au dépôt.
+        La progression (contes terminés, quiz, fins) est stockée uniquement dans ton navigateur. Un enregistrement ne
+        quitte ton appareil que si tu cliques sur « Publier sur le site », avec l’accord de la personne enregistrée ; il
+        est alors relu par l’équipe avant d’être mis en ligne.
       </p>
 
       <h2>Contexte académique</h2>

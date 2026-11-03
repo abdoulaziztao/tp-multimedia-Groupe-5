@@ -14,3 +14,8 @@ __v0_jsx-dev-runtime.ts
 node_modules
 .next/
 .DS_Store
+# TypeScript cache
+*.tsbuildinfo
+
+# Enregistrements en attente (développement local)
+.recordings/
