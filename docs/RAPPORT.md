@@ -21,7 +21,7 @@ Faso — Récits vivants répond à chacun de ces points et ajoute ce qui rend u
 |---|---|
 | Carte interactive **3D/2D** | Carte vectorielle WebGL (MapLibre GL) avec **relief réel** (modèle numérique de terrain, exagération ×3), bascule 3D ↔ 2D, plan ↔ satellite, **13 régions** cliquables, 8 marqueurs, **visite guidée** automatique. |
 | Contes, légendes, récits locaux | **8 contes** rattachés à 8 régions et à 8 cultures (Mossi, Bobo, Peul, Gourmantché, Sénoufo, Lobi, Bwa…), avec contexte culturel et morale. |
-| Illustrations animées | **6 décors SVG animés** générés en code (savane, mare, dune, cascade, village, forêt), jour/nuit, pluie, feu, ondulations ; plus la scène « Veillée sous le baobab ». |
+| Illustrations animées | **6 décors SVG animés** générés en code (savane, mare, dune, cascade, village, forêt), jour/nuit, pluie, feu, ondulations ; plus la scène « Veillée sous le baobab ». Chaque scène est « mise en scène » : **atmosphère animée en canvas** (lucioles, poussière dorée, sable, brume, braises, oiseaux), rayons de lumière, grain de pellicule, vignettage, **parallaxe** au pointeur et **mouvement de caméra** lent. Une **image générée par IA** peut être ajoutée par conte (voir `docs/IMAGES.md`). |
 | Bandes sonores en langues nationales | Lecteur audio multi-langue (français, mooré, dioula, fulfulde). Le site lit un **enregistrement réel** s’il existe (`public/audio/<conte>.<langue>.mp3`), sinon une voix de synthèse en repli, avec le texte surligné en synchronisation. **Ambiance sonore synthétisée** (Web Audio) propre à chaque décor. |
 | Expérience narrative interactive | **Histoire à embranchements** (plusieurs choix, trois types de fins : sage / équilibrée / risquée), **quiz** de compréhension, **carnet du griot** avec badges et progression. |
 | Rapport + lien du site | Ce document et l’URL de déploiement ci-dessus. |
@@ -31,6 +31,7 @@ Faso — Récits vivants répond à chacun de ces points et ajoute ce qui rend u
 - **Atelier d’enregistrement** (`/contribuer`) : enregistrement micro dans le navigateur, visualisation du signal, **consentement obligatoire** de la personne enregistrée, export de l’audio et d’une fiche de métadonnées JSON. Rien n’est envoyé à un serveur.
 - **Lexique des langues** (`/langues`) : présentation du mooré, du dioula et du fulfulde avec mini-lexique, signalé comme « à valider avec des locuteurs ».
 - **Catalogue** (`/contes`) avec recherche insensible aux accents et filtre par langue de tradition.
+- **Animations d'interface** : apparition progressive des sections au défilement, titres animés, cartes interactives ; désactivées si l'appareil demande de réduire les animations.
 - **Progression locale** (contes terminés, scores, fins découvertes) conservée dans le navigateur, sans compte.
 - **SEO et partage** : métadonnées par page, données structurées JSON-LD, sitemap, robots, image Open Graph générée, manifeste d’application installable.
 

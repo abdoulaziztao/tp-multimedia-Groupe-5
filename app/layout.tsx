@@ -1,6 +1,7 @@
 import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
 import localFont from 'next/font/local'
+import { RevealOnScroll } from '@/components/reveal-on-scroll'
 import { SiteFooter } from '@/components/site-footer'
 import { SiteHeader } from '@/components/site-header'
 import { SITE_DESCRIPTION, SITE_NAME, siteUrl } from '@/lib/site'
@@ -57,6 +58,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <SiteHeader />
         <main id="contenu">{children}</main>
         <SiteFooter />
+        <RevealOnScroll />
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>
     </html>

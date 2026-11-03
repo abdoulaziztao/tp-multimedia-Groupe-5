@@ -22,6 +22,7 @@ pnpm build
 ## Documentation
 
 - [`docs/RAPPORT.md`](docs/RAPPORT.md) — rapport du projet (conformité au sujet, architecture, choix, limites)
+- [`docs/IMAGES.md`](docs/IMAGES.md) — ajouter des images générées (IA) + prompts prêts à l'emploi
 - [`docs/AUDIO.md`](docs/AUDIO.md) — ajouter des enregistrements en langues nationales
 
 ## Ajouter un conte

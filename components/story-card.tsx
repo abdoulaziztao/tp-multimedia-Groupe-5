@@ -1,14 +1,14 @@
 import Link from 'next/link'
 import { ArrowUpRight, Clock } from 'lucide-react'
 import { SceneArt } from '@/components/scene-art'
-import { readingMinutes } from '@/lib/stories'
+import { readingMinutes, storyImage } from '@/lib/stories'
 import type { Story } from '@/lib/types'
 
 export function StoryCard({ story }: { story: Story }) {
   return (
-    <Link href={`/contes/${story.slug}`} className="card" style={{ ['--c' as string]: story.color }}>
+    <Link href={`/contes/${story.slug}`} className="card" data-reveal style={{ ['--c' as string]: story.color }}>
       <div className="card__art">
-        <SceneArt variant={story.variant} night={story.night} rain={story.rain} focus={story.slug === 'la-fille-aux-cauris' ? 'person' : undefined} />
+        <SceneArt variant={story.variant} night={story.night} rain={story.rain} image={storyImage(story.slug)} focus={story.slug === 'la-fille-aux-cauris' ? 'person' : undefined} />
         <span className="tag">{story.tag}</span>
       </div>
       <div className="card__body">

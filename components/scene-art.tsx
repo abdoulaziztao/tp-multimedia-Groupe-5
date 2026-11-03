@@ -1,3 +1,4 @@
+import { SceneStage } from '@/components/scene-stage'
 import type { SceneVariant } from '@/lib/types'
 
 export type SceneFocus = 'animals' | 'person' | 'storyteller'
@@ -9,6 +10,10 @@ interface SceneArtProps {
   focus?: SceneFocus
   label?: string
   className?: string
+  /** Mouvement de caméra lent (pour les grands visuels). */
+  cinematic?: boolean
+  /** Image facultative affichée par-dessus l'illustration si le fichier existe. */
+  image?: string
 }
 
 /* ---------- utilitaires ---------- */
@@ -107,7 +112,7 @@ function Flame({ x, y, scale = 1 }: { x: number; y: number; scale?: number }) {
 
 /* ---------- composition ---------- */
 
-export function SceneArt({ variant, night = false, rain = false, focus, label, className }: SceneArtProps) {
+export function SceneArt({ variant, night = false, rain = false, focus, label, className, cinematic = false, image }: SceneArtProps) {
   // id déterministe : deux scènes identiques partagent des dégradés identiques (aucun conflit).
   const uid = `sa-${variant}-${night ? 'n' : 'd'}`
   const [skyTop, skyBottom] = night ? SKY[variant].night : SKY[variant].day
@@ -116,6 +121,7 @@ export function SceneArt({ variant, night = false, rain = false, focus, label, c
   const fg = focus ?? (variant === 'savane' ? 'animals' : 'person')
 
   return (
+    <SceneStage variant={variant} night={night} rain={rain} cinematic={cinematic} image={image}>
     <svg
       className={`scene ${className ?? ''}`}
       viewBox="0 0 800 450"
@@ -327,5 +333,6 @@ export function SceneArt({ variant, night = false, rain = false, focus, label, c
         </>
       )}
     </svg>
+    </SceneStage>
   )
 }

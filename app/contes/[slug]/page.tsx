@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation'
 import { ArrowLeft, ArrowRight, Clock, MapPin } from 'lucide-react'
 import { SceneArt } from '@/components/scene-art'
 import { StoryExperience } from '@/components/story-experience'
-import { STORIES, getStory, readingMinutes } from '@/lib/stories'
+import { STORIES, getStory, readingMinutes, storyImage } from '@/lib/stories'
 
 export function generateStaticParams() {
   return STORIES.map((s) => ({ slug: s.slug }))
@@ -48,6 +48,8 @@ export default async function StoryPage({ params }: { params: Promise<{ slug: st
           variant={story.variant}
           night={story.night}
           rain={story.rain}
+          cinematic
+          image={storyImage(story.slug)}
           focus={story.slug === 'la-fille-aux-cauris' ? 'person' : undefined}
           label={`Illustration animée du conte « ${story.title} »`}
         />

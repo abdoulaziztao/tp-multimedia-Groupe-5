@@ -44,12 +44,12 @@ export default function HomePage() {
           </dl>
         </div>
         <div className="hero__art">
-          <SceneArt variant="savane" focus="storyteller" label="Illustration : un conteur et son tambour sous un acacia, au coucher du soleil" />
+          <SceneArt variant="savane" focus="storyteller" cinematic image="/images/accueil.jpg" label="Illustration : un conteur et son tambour sous un acacia, au coucher du soleil" />
         </div>
       </section>
 
       <section className="section section--paper" id="explorer" aria-labelledby="explorer-title">
-        <div className="section__head">
+        <div className="section__head" data-reveal>
           <div>
             <p className="eyebrow"><span /> CARTE DES RÉCITS</p>
             <h2 id="explorer-title">
@@ -61,13 +61,13 @@ export default function HomePage() {
           <p className="section__note">Clique sur un marqueur ou sur une région colorée pour découvrir son conte, puis écoute-le directement.</p>
         </div>
         <Explorer stories={STORIES} />
-        <div className="home-carnet">
+        <div className="home-carnet" data-reveal>
           <Carnet total={STORIES.length} />
         </div>
       </section>
 
       <section className="section" aria-labelledby="how-title">
-        <div className="section__head">
+        <div className="section__head" data-reveal>
           <div>
             <p className="eyebrow"><span /> UNE EXPÉRIENCE EN 4 TEMPS</p>
             <h2 id="how-title">
@@ -79,7 +79,7 @@ export default function HomePage() {
         </div>
         <ol className="steps">
           {STEPS.map((s, i) => (
-            <li key={s.title}>
+            <li key={s.title} data-reveal style={{ ['--i' as string]: i }}>
               <span className="steps__num">0{i + 1}</span>
               <s.icon aria-hidden="true" />
               <h3>{s.title}</h3>
@@ -90,7 +90,7 @@ export default function HomePage() {
       </section>
 
       <section className="section section--paper" aria-labelledby="langs-title">
-        <div className="section__head">
+        <div className="section__head" data-reveal>
           <div>
             <p className="eyebrow"><span /> LANGUES NATIONALES</p>
             <h2 id="langs-title">
@@ -104,10 +104,10 @@ export default function HomePage() {
           </Link>
         </div>
         <div className="lang-grid">
-          {LANGUAGES.filter((l) => l.code !== 'fr').map((l) => {
+          {LANGUAGES.filter((l) => l.code !== 'fr').map((l, i) => {
             const merci = PHRASES[l.code as 'mos' | 'dyu' | 'ful'].find((p) => p.fr === 'Merci')
             return (
-              <article key={l.code} className="lang-card">
+              <article key={l.code} className="lang-card" data-reveal style={{ ['--i' as string]: i }}>
                 <h3>{l.name}</h3>
                 <p className="lang-card__area">{l.area}</p>
                 <p className="lang-card__word">
@@ -122,7 +122,7 @@ export default function HomePage() {
       </section>
 
       <section className="section" aria-labelledby="veillee-title">
-        <div className="veillee">
+        <div className="veillee" data-reveal>
           <div className="veillee__copy">
             <p className="veillee__kicker">ILLUSTRATION ANIMÉE</p>
             <h2 id="veillee-title">Veillée sous le baobab</h2>
